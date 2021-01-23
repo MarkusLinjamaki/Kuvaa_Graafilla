@@ -68,6 +68,7 @@ public class Kayttoliittyma extends Application {
                 greyList[y][x] = grayscale;
             }
         }
+        
         //Setting the image view 1 
         imageView1 = new ImageView(image); 
       
@@ -112,7 +113,7 @@ public class Kayttoliittyma extends Application {
 	textField2.setText("5");
 	textField2.setLayoutX(50);
 	textField2.setLayoutY(height/2+3.1*delta);
-	  
+        
         button1 = new Button("Hae yksi komponentti syvyyshaulla");
 	button1.setLayoutX(50);
 	button1.setLayoutY(height/2+4*delta);
@@ -155,12 +156,12 @@ public class Kayttoliittyma extends Application {
                     System.out.println("Toka teksti "+ txt2);
             } 
         }; 
-	  
+        
 	button1.setOnAction(event);
 	button2.setOnAction(event);
 	button3.setOnAction(event);
 	button4.setOnAction(event);
-	  
+        
 	EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() { 
             @Override 
             public void handle(MouseEvent e) {             
