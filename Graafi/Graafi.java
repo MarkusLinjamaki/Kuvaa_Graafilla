@@ -94,6 +94,7 @@ public class Graafi {
         switch (metodi) {
             
             case SYVYYSHAKU:
+                System.out.println("Suoritetaan syvyyshaku");
                 // polku jota pitkin kuljetaan
                 Pino pinoX = new Pino();
                 Pino pinoY = new Pino();
@@ -160,13 +161,11 @@ public class Graafi {
                     if (!seuraavaLoydetty) {
                         x = (Integer) pinoX.pop();
                         y = (Integer) pinoY.pop();
-                        //Piste vanhaPiste = new Piste(x,y);
-                        // ollaan vanhassa pisteessä, jote tätä ei lisätä graafiin
-                        //alkuSolmu = etsi(vanhaPiste);
                     }
                 }
                 break;
             case LEVEYSHAKU:
+                System.out.println("Suoritetaan leveyshaku");
                 // Jono tietorakenne linkitetyllä listalla
                 Queue<Solmu> solmuJono = new LinkedList<>();
                 solmuJono.add(alkuSolmu);
@@ -177,47 +176,45 @@ public class Graafi {
 
                 while (!solmuJono.isEmpty()) {
                     // jokaiselle solmulle pitää erikseen käydä mahdolliset paikat
-                    for (int i = 0; i < vanhatSolmutLKM; i++) {
-                        alkuSolmu = solmuJono.remove();
-                        x = (Integer) alkuSolmu.piste().x();
-                        y = (Integer) alkuSolmu.piste().y();       
-              
-                        for (int a = -1; a < 2; a++) {
-                            for (int e = -1; e < 2; e++) {
-                                if (0 <= (y + a) && (y + a) < greyList.length && 0 <= (x + e) && (x + e) < greyList[0].length) {
-                                    // harmaasävy ehto toteutuu voidaan yrittöö
-                                    // alkaa muodostaa solmuja ja särmiä
-                                    if (Math.abs(greyList[y + a][x + e] - greyList[p.y()][p.x()]) < kokonaisEro && Math.abs(greyList[y + a][x + e] - greyList[y][x]) < intensiteettiEro && !solmuTaulu[y + a][x + e]) {
-                                        // uusi piste
-                                        loppuPiste = new Piste(x + e, y + a);
-                                        // uusi solmu
-                                        loppuSolmu = new Solmu(loppuPiste, solmuLaskuri);
-
-                                        // uusi kaari 
-                                        kaari = new Kaari(alkuSolmu, loppuSolmu, Math.abs(greyList[y + a][x + e] - greyList[y][x]), kaariLaskuri);
+                    
+                    alkuSolmu = solmuJono.remove();
+                    x = (Integer) alkuSolmu.piste().x();
+                    y = (Integer) alkuSolmu.piste().y();       
+           
+                    for (int a = -1; a < 2; a++) {
+                        for (int e = -1; e < 2; e++) {
+                            if (0 <= (y + a) && (y + a) < greyList.length && 0 <= (x + e) && (x + e) < greyList[0].length) {
+                                // harmaasävy ehto toteutuu voidaan yrittöö
+                                // alkaa muodostaa solmuja ja särmiä
+                                if (Math.abs(greyList[y + a][x + e] - greyList[p.y()][p.x()]) < kokonaisEro && Math.abs(greyList[y + a][x + e] - greyList[y][x]) < intensiteettiEro && !solmuTaulu[y + a][x + e]) {
+                                    // uusi piste
+                                    loppuPiste = new Piste(x + e, y + a);
+                                    // uusi solmu
+                                    loppuSolmu = new Solmu(loppuPiste, solmuLaskuri);
+                                    // uusi kaari 
+                                    kaari = new Kaari(alkuSolmu, loppuSolmu, Math.abs(greyList[y + a][x + e] - greyList[y][x]), kaariLaskuri);
+                                    try {
+                                        solmut.add(loppuSolmu);
+                                        solmuTaulu[y + a][x + e] = true;
+                                        solmuLaskuri++;
+                                        uudetSolmutLKM++;
+                                        solmuJono.add(loppuSolmu);
+                                        // siirrytään polulla, loppusolmu alkusolmuksi
+                                        alkuSolmu = loppuSolmu;
                                         try {
-                                            solmut.add(loppuSolmu);
-                                            solmuTaulu[y + a][x + e] = true;
-                                            solmuLaskuri++;
-                                            uudetSolmutLKM++;
-                                            solmuJono.add(loppuSolmu);
-                                            // siirrytään polulla, loppusolmu alkusolmuksi
-                                            alkuSolmu = loppuSolmu;
-                                            try {
-
-                                                kaaret.add(kaari);
-                                                kaariLaskuri++;
-                                            } catch (Exception ezz) {
-
-                                            }
-                                        } catch (Exception trr) {
+                                            kaaret.add(kaari);
+                                            kaariLaskuri++;
+                                        } catch (Exception ezz) {
 
                                         }
+                                    } catch (Exception trr) {
+                                        
                                     }
                                 }
                             }
                         }
                     }
+                    
                     vanhatSolmutLKM = uudetSolmutLKM;
                     uudetSolmutLKM = 0;
                 }
@@ -247,11 +244,14 @@ public class Graafi {
                         }
                     }
                     laskuri++;
-                    System.out.println(laskuri);
                     // kaaret lisätty, valitaan arvoltaan pienin kaari
                     Kaari pieninKaari = (Kaari) kaariLista.poll();
-                    // jos kaari ei tyhjä eikä kaaren loppusolmu ole graafissa
-                    if(pieninKaari != null && !solmuTaulu[pieninKaari.loppuSolmu().piste().y()][pieninKaari.loppuSolmu().piste().x()]){
+                    // poistetaan prioriteettjinosta kaaria, kunnes kaaren loppusolmu on uusi tai kaari on null 
+                    while( pieninKaari !=  null && solmuTaulu[pieninKaari.loppuSolmu().piste().y()][pieninKaari.loppuSolmu().piste().x()]){
+                        pieninKaari = (Kaari) kaariLista.poll();
+                    }
+                    // jos kaari ei null niin lisätään uudet osat grafiin
+                    if(pieninKaari != null){
                         // Pienimmän kaaren loppusolmusta tehdään uusi haku
                         Solmu uusi = pieninKaari.loppuSolmu();
                         solmut.add(uusi);
@@ -262,8 +262,9 @@ public class Graafi {
                         y = uusi.piste().y();
                         solmuTaulu[y][x] = true;
                     }
+                    
                 }
-                while(laskuri < 100000);
+                while(!kaariLista.isEmpty());
                 
                 break;
             default:

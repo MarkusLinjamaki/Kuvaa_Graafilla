@@ -211,7 +211,6 @@ public class Kayttoliittyma extends Application {
             }
         }	
         imageView2.setImage(wImage);
-        System.out.println("ohi");
     }
    
     public void Syvyyshaku(){
