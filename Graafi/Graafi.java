@@ -40,6 +40,7 @@ public class Graafi {
     public Graafi() {
         solmut =  new LinkedList<>();
         kaaret =  new LinkedList<>();
+        // olkoon tämä oletuskoko
         solmuTaulu = new boolean[1080][1080];
     }
 
@@ -96,6 +97,7 @@ public class Graafi {
             case SYVYYSHAKU:
                 System.out.println("Suoritetaan syvyyshaku");
                 // polku jota pitkin kuljetaan
+                // hyödynnetään tässä itse tehtyä tietorakennetta
                 Pino pinoX = new Pino();
                 Pino pinoY = new Pino();
 
@@ -163,7 +165,9 @@ public class Graafi {
                         y = (Integer) pinoY.pop();
                     }
                 }
+                System.out.println("Valmis!");
                 break;
+                
             case LEVEYSHAKU:
                 System.out.println("Suoritetaan leveyshaku");
                 // Jono tietorakenne linkitetyllä listalla
@@ -171,7 +175,6 @@ public class Graafi {
                 solmuJono.add(alkuSolmu);
                 // lisätään aloituspaikka polulle
                 
-                int vanhatSolmutLKM = 1;
                 int uudetSolmutLKM = 0;
 
                 while (!solmuJono.isEmpty()) {
@@ -197,7 +200,6 @@ public class Graafi {
                                         solmut.add(loppuSolmu);
                                         solmuTaulu[y + a][x + e] = true;
                                         solmuLaskuri++;
-                                        uudetSolmutLKM++;
                                         solmuJono.add(loppuSolmu);
                                         // siirrytään polulla, loppusolmu alkusolmuksi
                                         alkuSolmu = loppuSolmu;
@@ -215,12 +217,11 @@ public class Graafi {
                         }
                     }
                     
-                    vanhatSolmutLKM = uudetSolmutLKM;
-                    uudetSolmutLKM = 0;
                 }
+                System.out.println("Valmis!");
                 break;
             case PIENINVIRITTAVA:
-                int laskuri = 0;
+                System.out.println("Suoritetaan pienimmän virittävän puun etsintä!");
                 Queue<Kaari> kaariLista = new PriorityQueue<>();
                 do{
                     for (int a = -1; a < 2; a++) {
@@ -243,7 +244,6 @@ public class Graafi {
                             }
                         }
                     }
-                    laskuri++;
                     // kaaret lisätty, valitaan arvoltaan pienin kaari
                     Kaari pieninKaari = (Kaari) kaariLista.poll();
                     // poistetaan prioriteettjinosta kaaria, kunnes kaaren loppusolmu on uusi tai kaari on null 
@@ -265,10 +265,10 @@ public class Graafi {
                     
                 }
                 while(!kaariLista.isEmpty());
-                
+                System.out.println("Valmi!");
                 break;
             default:
-                System.out.println("ERROR");
+                System.out.println("Jokin meni vikaan...");
         }
     }      
     // palauttaa true jos graafissa on jo kyseinen solmu

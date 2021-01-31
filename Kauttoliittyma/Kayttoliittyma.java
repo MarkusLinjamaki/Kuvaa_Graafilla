@@ -22,6 +22,7 @@ import javafx.event.ActionEvent;
 import java.util.Random;
 import java.io.FileWriter; 
 import java.io.IOException;
+
 //Tira 2020 harjoitustyön pohja. 
 //Muokattu https://www.tutorialspoint.com/javafx/index.htm esimerkeistä.
 
@@ -34,11 +35,14 @@ public class Kayttoliittyma extends Application {
     Button button4;
     Image image;
     WritableImage wImage;
+    // kuvan leveys
     double width;
+    // kuvan korkeus
     double height;
     ImageView imageView1;
     ImageView imageView2;
     
+    // harmaasävylista, johon merkataan jokaisen kuvapisteen harmaasävyarvo
     int greyList[][];
     Piste aloitusPiste;
     int kokonaisEro;
@@ -46,19 +50,18 @@ public class Kayttoliittyma extends Application {
     
     @Override 
     public void start(Stage stage) throws FileNotFoundException {         
-        //Creating an image 	  	  
+        // Luodaan kuva 	  	  
         image= new Image(new FileInputStream("Testikuva.jpg"));  
         width=image.getWidth();
 	height=image.getHeight();	   
-        System.out.println(height  + " " +  width);
-        // update greylist
+        // asetetaan harmaasävylistalle oikea koko
         greyList = new int[(int)height][(int)(width)];
         
         PixelReader pixelReader = image.getPixelReader();       
-        //Reading through the image. 
+        // Luetaan kuva kokonaan läpi ja mudostetaan harmaasävytaulukko 
         for(int y = 0; y < height; y++) { 
             for(int x = 0; x < width; x++) { 
-                //Retrieving the color of the pixel of the loaded image   
+                // Kyseisen pikselin väri   
                 Color color = pixelReader.getColor(x, y); 
  
                 int r = (int) Math.round(color.getRed() * 255);
@@ -167,12 +170,11 @@ public class Kayttoliittyma extends Application {
             public void handle(MouseEvent e) {             
                 double x = e.getX();
                 double y = e.getY();
-                aloitusPiste = new Piste((int) ((x - 50) * 2 ), (int) ((y - 25) * 2));   // onkohan oikeinpäin 
-                System.out.println("Hiiren klikkaus rivilla "+ y+ " ja sarakkeella "+ x);
-                System.out.println("Aloituspiste = " + aloitusPiste.y() + " " + aloitusPiste.x());
-                //HUOM! Näkyvä kuvan korkeus ja leveys on puolet varsinaisesta kuvasta.
-                //Lisäksi näkyvän kuvan vasen yläreuna on kohdassa(50,25).
-                //Kuvassa tarvitaan kokonaislukuja.
+                /* HUOM! Näkyvä kuvan korkeus ja leveys on puolet varsinaisesta kuvasta.
+                 * Lisäksi näkyvän kuvan vasen yläreuna on kohdassa(50,25).
+                 * muokataan aloituspiste oikeaan kohtaan
+                 */
+                aloitusPiste = new Piste((int) ((x - 50) * 2 ), (int) ((y - 25) * 2));   
             } 
         };  
 	  
